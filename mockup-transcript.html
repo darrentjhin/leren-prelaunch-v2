@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup · Live transcript panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg: #FBF8F1; --surface: #FFFFFF; --surface-2: #F5F1E7;
+  --border: #E8E1CD; --border-strong: #D4C9AE;
+  --text: #1F1C18; --text-muted: #615A4C; --text-subtle: #8A8170;
+  --accent: #C2410C; --accent-hover: #EA580C;
+  --accent-soft: rgba(194,65,12,0.08); --accent-fg: #FBF8F1;
+  --sage: #15803D;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease: cubic-bezier(0.22,1,0.36,1);
+}
+body {
+  background: #ECE6D6; color: var(--text);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 24px;
+}
+.mockup-note {
+  max-width: 1380px; margin: 0 auto 16px;
+  font-family: var(--mono); font-size: 11px; color: var(--text-subtle);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px;
+}
+.mockup-note::before { content:''; width: 24px; height: 1px; background: var(--accent); }
+.mockup-h {
+  max-width: 1380px; margin: 0 auto 24px;
+  font-family: var(--serif); font-weight: 400; font-size: 26px;
+  letter-spacing: -0.02em; color: var(--text);
+}
+
+.app {
+  max-width: 1380px; margin: 0 auto;
+  display: grid; grid-template-columns: 220px 1fr 360px;
+  height: 740px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(31,28,24,0.08);
+}
+
+/* Sidebar (simplified) */
+.sb {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 18px 0;
+  display: flex; flex-direction: column;
+}
+.sb-brand { padding: 4px 18px 16px; font-family: var(--serif); font-size: 18px; }
+.sb-section { padding: 0 8px; }
+.sb-label { padding: 10px 12px 4px; font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase; }
+.sb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 12px; margin: 1px 0;
+  font-size: 13px; color: var(--text-muted);
+  border-radius: 5px; cursor: pointer;
+}
+.sb-item:hover { background: rgba(31,28,24,0.04); color: var(--text); }
+.sb-item.active { background: var(--accent-soft); color: var(--accent); }
+.sb-item svg { width: 14px; height: 14px; }
+
+/* Main: Live tutor stage */
+.main {
+  display: grid; grid-template-rows: auto 1fr auto;
+}
+.bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.bar-l { display: flex; align-items: center; gap: 14px; }
+.bar-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sage);
+}
+.bar-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); animation: pulse 2s infinite; box-shadow: 0 0 0 0 var(--sage); }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(21,128,61,0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(21,128,61,0); }
+  100% { box-shadow: 0 0 0 0 rgba(21,128,61,0); }
+}
+.bar-meta { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.05em; }
+.bar-r { display: flex; align-items: center; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 12px;
+  font-size: 12.5px; font-weight: 500;
+  border-radius: 4px; border: 1px solid transparent; cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s var(--ease);
+}
+.btn-ghost { color: var(--text-muted); }
+.btn-ghost:hover { background: rgba(31,28,24,0.04); color: var(--text); }
+.btn-secondary {
+  background: var(--surface); color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--text-subtle); }
+.btn svg { width: 12px; height: 12px; }
+
+/* Chat area */
+.chat {
+  overflow-y: auto;
+  padding: 28px 32px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.msg-user, .msg-ai { max-width: 80%; padding: 13px 16px; font-size: 14px; line-height: 1.6; border-radius: 14px; }
+.msg-user {
+  align-self: flex-end;
+  background: var(--accent); color: var(--accent-fg);
+  border-bottom-right-radius: 2px;
+}
+.msg-ai {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 2px;
+}
+.msg-formula {
+  margin-top: 10px;
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--accent); border-radius: 5px;
+  padding: 8px 14px; font-family: var(--mono); font-size: 13px;
+  text-align: center;
+}
+
+/* Input bar */
+.input {
+  border-top: 1px solid var(--border);
+  padding: 14px 22px;
+  background: var(--surface);
+  display: flex; align-items: center; gap: 12px;
+}
+.input-field {
+  flex: 1; display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-subtle);
+}
+.wave { display: flex; align-items: center; gap: 2px; }
+.wave span { width: 2px; background: var(--accent); border-radius: 2px; animation: wv 1.2s ease-in-out infinite; }
+.wave span:nth-child(1){height:8px;animation-delay:0s} .wave span:nth-child(2){height:14px;animation-delay:0.1s} .wave span:nth-child(3){height:10px;animation-delay:0.2s}
+.wave span:nth-child(4){height:16px;animation-delay:0.3s} .wave span:nth-child(5){height:12px;animation-delay:0.15s}
+@keyframes wv { 0%,100%{transform:scaleY(0.5);opacity:0.4} 50%{transform:scaleY(1.1);opacity:1} }
+.mic {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-fg);
+  display: grid; place-items: center; cursor: pointer;
+}
+.mic svg { width: 15px; height: 15px; }
+
+/* ━━━━━━━━━━ TRANSCRIPT PANEL (the new feature) ━━━━━━━━━━ */
+.tx {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.tx-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.tx-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tx-title {
+  font-family: var(--serif); font-weight: 500;
+  font-size: 15px; letter-spacing: -0.01em;
+}
+.tx-tools { display: flex; gap: 4px; }
+.tx-icon {
+  width: 26px; height: 26px;
+  border-radius: 4px;
+  display: grid; place-items: center;
+  color: var(--text-subtle); cursor: pointer;
+  transition: all 0.15s;
+}
+.tx-icon:hover { background: rgba(31,28,24,0.05); color: var(--text); }
+.tx-icon svg { width: 12px; height: 12px; }
+.tx-search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 11px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 12.5px; color: var(--text-subtle);
+}
+.tx-search svg { width: 12px; height: 12px; }
+.tx-tabs {
+  display: flex; gap: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px; padding: 2px;
+}
+.tx-tab {
+  flex: 1; padding: 5px 10px;
+  font-size: 11.5px; font-weight: 500;
+  color: var(--text-subtle);
+  border-radius: 3px; cursor: pointer;
+  text-align: center;
+  font-family: inherit; border: 0; background: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+}
+.tx-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.tx-tab svg { width: 10px; height: 10px; }
+
+.tx-body {
+  flex: 1; overflow-y: auto;
+  padding: 16px 6px 16px 16px;
+}
+.tx-stamp {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 4px 0 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.tx-stamp::before, .tx-stamp::after { content:''; flex: 1; height: 1px; background: var(--border); }
+
+.tx-msg {
+  position: relative;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tx-msg:hover { background: var(--surface-2); }
+.tx-msg-meta {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.tx-msg-meta .who { color: var(--text); font-weight: 500; }
+.tx-msg-meta .who.tutor { color: var(--accent); }
+.tx-msg-text { font-size: 12.5px; color: var(--text); line-height: 1.55; }
+.tx-msg-actions {
+  position: absolute; top: 8px; right: 8px;
+  display: flex; gap: 2px;
+  opacity: 0; transition: opacity 0.15s;
+}
+.tx-msg:hover .tx-msg-actions { opacity: 1; }
+.tx-act {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  color: var(--text-subtle);
+  cursor: pointer;
+}
+.tx-act:hover { color: var(--accent); border-color: var(--accent); }
+.tx-act svg { width: 10px; height: 10px; }
+
+.tx-msg.bookmarked { background: var(--accent-soft); }
+.tx-msg.bookmarked::before {
+  content:''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--accent); border-radius: 2px;
+}
+
+.tx-snap {
+  margin-top: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.tx-snap-img {
+  height: 110px;
+  background: linear-gradient(135deg, #1F1C18 0%, #3D3830 100%);
+  display: grid; place-items: center;
+  position: relative;
+}
+.tx-snap-img::after {
+  content:''; position:absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 4px);
+}
+.tx-snap-img span {
+  font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.1em; position: relative; z-index: 1;
+}
+.tx-snap-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.04em;
+}
+.tx-snap-foot a { color: var(--accent); cursor: pointer; }
+
+.tx-foot {
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.05em;
+}
+.tx-foot a { color: var(--accent); cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="mockup-note">Mockup · Live Tutor with transcript panel</div>
+<h1 class="mockup-h">Right side panel: live transcript, bookmarks, and screenshot history.</h1>
+
+<div class="app">
+
+  <!-- Sidebar (simplified for context) -->
+  <aside class="sb">
+    <div class="sb-brand">Leren</div>
+    <div class="sb-section">
+      <div class="sb-label">Tutor</div>
+      <div class="sb-item active"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5a3 3 0 00-3 3v4a3 3 0 006 0v-4a3 3 0 00-3-3z" stroke="currentColor" stroke-width="1.3"/><path d="M3 8.5a5 5 0 0010 0M8 13.5v1.5M5.5 15h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Live Tutor</div>
+      <div class="sb-item"><svg viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>Full Session</div>
+      <div class="sb-label">Library</div>
+      <div class="sb-item">Subjects</div>
+      <div class="sb-item">Saved</div>
+      <div class="sb-item">History</div>
+    </div>
+  </aside>
+
+  <!-- Main Live Tutor -->
+  <main class="main">
+    <div class="bar">
+      <div class="bar-l">
+        <div class="bar-status"><span class="dot"></span> Listening</div>
+        <div class="bar-meta">Organic Chemistry · 12:34</div>
+      </div>
+      <div class="bar-r">
+        <button class="btn btn-ghost"><svg viewBox="0 0 14 14" fill="none"><rect x="3" y="2.5" width="2.5" height="9" rx="0.5" fill="currentColor"/><rect x="8.5" y="2.5" width="2.5" height="9" rx="0.5" fill="currentColor"/></svg>Pause</button>
+        <button class="btn btn-secondary"><svg viewBox="0 0 14 14" fill="none"><rect x="3" y="3" width="8" height="8" rx="0.5" fill="currentColor"/></svg>End</button>
+      </div>
+    </div>
+
+    <div class="chat">
+      <div class="msg-user">Can you explain SN1 vs SN2 mechanisms?</div>
+      <div class="msg-ai">
+        Both are nucleophilic substitution but they work through different paths. <strong>SN1</strong> is two-step (carbocation intermediate, slower), <strong>SN2</strong> is one-step (concerted, backside attack). What kind of substrate are you looking at?
+      </div>
+      <div class="msg-user">Tertiary alkyl halide</div>
+      <div class="msg-ai">
+        Tertiary substrates strongly favor <strong>SN1</strong>. The carbocation intermediate is well-stabilized by the three alkyl groups. SN2 is sterically blocked at tertiary carbons.
+        <div class="msg-formula">R₃C-X + H₂O → R₃C-OH + HX</div>
+      </div>
+    </div>
+
+    <div class="input">
+      <div class="input-field">
+        <span style="flex:1;">Ask anything, or just speak...</span>
+        <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <button class="mic"><svg viewBox="0 0 16 16" fill="none"><rect x="6" y="2" width="4" height="8" rx="2" fill="currentColor"/><path d="M3.5 8a4.5 4.5 0 009 0M8 12.5V14M5.5 14h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+    </div>
+  </main>
+
+  <!-- ━━━━━━━━━━ TRANSCRIPT PANEL ━━━━━━━━━━ -->
+  <aside class="tx">
+    <div class="tx-head">
+      <div class="tx-title-row">
+        <div class="tx-title">Live transcript</div>
+        <div class="tx-tools">
+          <button class="tx-icon" title="Auto-scroll"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M3 7l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="tx-icon" title="Export"><svg viewBox="0 0 12 12" fill="none"><path d="M6 8V2M3.5 4.5l2.5-2.5 2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+          <button class="tx-icon" title="Hide panel"><svg viewBox="0 0 12 12" fill="none"><path d="M8 2l-4 4 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="tx-search">
+        <svg viewBox="0 0 12 12" fill="none"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span>Search transcript…</span>
+      </div>
+      <div class="tx-tabs">
+        <button class="tx-tab active">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 3h8M2 6h8M2 9h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Transcript
+        </button>
+        <button class="tx-tab">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 1.5h6v9L6 8.5 3 10z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          Bookmarks (2)
+        </button>
+        <button class="tx-tab">
+          <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="2.5" width="8" height="6" rx="0.5" stroke="currentColor" stroke-width="1.3"/></svg>
+          Screen
+        </button>
+      </div>
+    </div>
+
+    <div class="tx-body">
+      <div class="tx-stamp">12:30</div>
+
+      <div class="tx-msg">
+        <div class="tx-msg-meta"><span class="who">You</span><span>· 12:31</span></div>
+        <div class="tx-msg-text">Can you explain SN1 vs SN2 mechanisms?</div>
+        <div class="tx-msg-actions">
+          <button class="tx-act" title="Bookmark"><svg viewBox="0 0 12 12" fill="none"><path d="M3 1.5h6v9L6 8.5 3 10z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
+          <button class="tx-act" title="Copy"><svg viewBox="0 0 12 12" fill="none"><rect x="3.5" y="3.5" width="6" height="6" rx="0.5" stroke="currentColor" stroke-width="1.3"/></svg></button>
+        </div>
+      </div>
+
+      <div class="tx-msg bookmarked">
+        <div class="tx-msg-meta"><span class="who tutor">Tutor</span><span>· 12:31</span></div>
+        <div class="tx-msg-text">Both are nucleophilic substitution but they work through different paths. <strong>SN1</strong> is two-step (carbocation intermediate, slower), <strong>SN2</strong> is one-step (concerted, backside attack)…</div>
+        <div class="tx-msg-actions">
+          <button class="tx-act" title="Bookmarked" style="color: var(--accent); border-color: var(--accent);"><svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 1.5h6v9L6 8.5 3 10z"/></svg></button>
+        </div>
+      </div>
+
+      <div class="tx-msg">
+        <div class="tx-msg-meta"><span class="who">You</span><span>· 12:32</span></div>
+        <div class="tx-msg-text">Tertiary alkyl halide</div>
+      </div>
+
+      <div class="tx-msg bookmarked">
+        <div class="tx-msg-meta"><span class="who tutor">Tutor</span><span>· 12:33</span></div>
+        <div class="tx-msg-text">Tertiary substrates strongly favor <strong>SN1</strong>. The carbocation intermediate is well-stabilized by the three alkyl groups…</div>
+        <div class="tx-snap">
+          <div class="tx-snap-img"><span>SCREENSHOT · CHROME · 12:33</span></div>
+          <div class="tx-snap-foot">
+            <span>What the tutor saw</span>
+            <a>View full →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tx-stamp">12:34 · NOW</div>
+
+      <div class="tx-msg" style="opacity:0.55;">
+        <div class="tx-msg-meta"><span class="who tutor">Tutor</span><span>· typing...</span></div>
+        <div class="tx-msg-text">Want me to draw out the energy diagram comparing the two paths?</div>
+      </div>
+    </div>
+
+    <div class="tx-foot">
+      <span>4 messages · 2 bookmarked</span>
+      <a>Save all to subject</a>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup · Subject dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg: #FBF8F1; --surface: #FFFFFF; --surface-2: #F5F1E7;
+  --border: #E8E1CD; --border-strong: #D4C9AE;
+  --text: #1F1C18; --text-muted: #615A4C; --text-subtle: #8A8170;
+  --accent: #C2410C; --accent-hover: #EA580C;
+  --accent-soft: rgba(194,65,12,0.08); --accent-fg: #FBF8F1;
+  --sage: #15803D; --warn: #B45309;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease: cubic-bezier(0.22,1,0.36,1);
+}
+body {
+  background: #ECE6D6; color: var(--text);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; padding: 24px;
+}
+.mockup-note {
+  max-width: 1380px; margin: 0 auto 16px;
+  font-family: var(--mono); font-size: 11px; color: var(--text-subtle);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px;
+}
+.mockup-note::before { content:''; width: 24px; height: 1px; background: var(--accent); }
+.mockup-h {
+  max-width: 1380px; margin: 0 auto 24px;
+  font-family: var(--serif); font-weight: 400; font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.app {
+  max-width: 1380px; margin: 0 auto;
+  display: grid; grid-template-columns: 220px 1fr;
+  height: 820px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden; box-shadow: 0 20px 60px rgba(31,28,24,0.08);
+}
+
+.sb {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 18px 0;
+}
+.sb-brand { padding: 4px 18px 16px; font-family: var(--serif); font-size: 18px; }
+.sb-section { padding: 0 8px; }
+.sb-label { padding: 10px 12px 4px; font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase; }
+.sb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 12px; margin: 1px 0;
+  font-size: 13px; color: var(--text-muted);
+  border-radius: 5px; cursor: pointer;
+}
+.sb-item:hover { background: rgba(31,28,24,0.04); color: var(--text); }
+.sb-item.active { background: var(--accent-soft); color: var(--accent); }
+.sb-item svg { width: 14px; height: 14px; }
+.sb-item .pin { width: 6px; height: 6px; border-radius: 50%; margin-left: auto; flex-shrink: 0; }
+
+.main { overflow-y: auto; }
+
+/* Crumb / back */
+.crumbs {
+  display: flex; align-items: center; gap: 8px;
+  padding: 18px 36px 0;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-subtle); letter-spacing: 0.05em;
+}
+.crumbs a { color: var(--text-subtle); cursor: pointer; }
+.crumbs a:hover { color: var(--text); }
+.crumbs span { color: var(--text); }
+
+/* Subject header */
+.sub-header {
+  padding: 24px 36px 28px;
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 22px; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.sub-icon {
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #C2410C, #B45309);
+  color: #FBF8F1;
+  display: grid; place-items: center;
+  font-size: 28px;
+}
+.sub-info h1 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 32px; letter-spacing: -0.025em; color: var(--text);
+  margin-bottom: 4px;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+}
+.sub-goal { font-size: 13.5px; color: var(--text-muted); }
+.sub-goal a { color: var(--accent); border-bottom: 1px solid currentColor; }
+.sub-actions { display: flex; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px;
+  font-size: 13px; font-weight: 500;
+  border-radius: 4px; border: 1px solid transparent;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.2s var(--ease);
+}
+.btn-primary {
+  background: var(--text); color: var(--bg); border-color: var(--text);
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-fg); }
+.btn-secondary {
+  background: var(--surface); color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--text-subtle); }
+.btn-ghost { color: var(--text-muted); padding: 9px 12px; }
+.btn-ghost:hover { background: rgba(31,28,24,0.04); color: var(--text); }
+.btn svg { width: 13px; height: 13px; }
+
+/* Stats strip */
+.stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+.stat {
+  padding: 22px 36px;
+  border-right: 1px solid var(--border);
+}
+.stat:last-child { border-right: 0; }
+.stat-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.stat-value {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 28px; color: var(--text); letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 60;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.stat-unit { font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0; }
+.stat-trend {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--sage); letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+.stat-trend.warn { color: var(--warn); }
+
+/* Body grid */
+.body {
+  padding: 32px 36px 60px;
+  display: grid; grid-template-columns: 2fr 1fr;
+  gap: 28px;
+}
+
+.section { margin-bottom: 32px; }
+.section:last-child { margin-bottom: 0; }
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-family: var(--serif); font-weight: 500;
+  font-size: 17px; letter-spacing: -0.01em;
+}
+.section-link {
+  font-size: 12px; color: var(--accent); cursor: pointer;
+}
+
+/* Recent activity */
+.activity-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.activity-row {
+  display: grid; grid-template-columns: 32px 1fr auto;
+  gap: 14px; align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.activity-row:last-child { border-bottom: 0; }
+.activity-row:hover { background: var(--surface-2); }
+.activity-icon {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid; place-items: center;
+}
+.activity-icon svg { width: 14px; height: 14px; }
+.activity-icon.tutor { background: rgba(21,128,61,0.10); color: var(--sage); }
+.activity-icon.note { background: rgba(180,83,9,0.10); color: var(--warn); }
+.activity-title { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.activity-meta { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.04em; }
+
+/* Concepts covered */
+.concept-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.concept {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12.5px; color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.concept:hover { border-color: var(--text-subtle); }
+.concept-strength {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.concept-strength.strong { background: var(--sage); }
+.concept-strength.medium { background: var(--warn); }
+.concept-strength.weak { background: var(--accent); }
+.concept-meta {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--text-subtle); letter-spacing: 0.04em;
+}
+
+/* Right column */
+.aside-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+.aside-card-title {
+  font-family: var(--serif); font-weight: 500;
+  font-size: 14.5px; letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+/* Deadline countdown */
+.deadline {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+.deadline-num {
+  font-family: var(--serif); font-weight: 400;
+  font-size: 56px; line-height: 1;
+  color: var(--accent); letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 144;
+}
+.deadline-unit { font-family: var(--mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
+.deadline-date { font-size: 12.5px; color: var(--text-muted); margin-top: 12px; }
+.deadline-bar {
+  margin-top: 14px;
+  height: 4px; background: var(--surface-2);
+  border-radius: 100px; overflow: hidden;
+}
+.deadline-bar span {
+  display: block; height: 100%; width: 62%;
+  background: var(--accent); border-radius: 100px;
+}
+.deadline-meta { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.04em; }
+
+/* Suggested next */
+.suggest-list { display: flex; flex-direction: column; gap: 8px; }
+.suggest {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px; color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.suggest:hover { background: var(--surface-2); }
+.suggest svg { width: 12px; height: 12px; color: var(--text-subtle); flex-shrink: 0; }
+.suggest .arrow { margin-left: auto; color: var(--text-subtle); }
+
+/* Files */
+.file-row {
+  display: grid; grid-template-columns: 28px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.file-row:hover { background: var(--surface-2); }
+.file-icon {
+  width: 28px; height: 28px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--text-subtle);
+  display: grid; place-items: center;
+}
+.file-icon svg { width: 13px; height: 13px; }
+.file-name { color: var(--text); }
+.file-meta { font-family: var(--mono); font-size: 10px; color: var(--text-subtle); letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<div class="mockup-note">Mockup · Subject dashboard (clicking a subject)</div>
+<h1 class="mockup-h">A real workspace per subject — not just a folder of files.</h1>
+
+<div class="app">
+
+  <!-- Sidebar (simplified) -->
+  <aside class="sb">
+    <div class="sb-brand">Leren</div>
+    <div class="sb-section">
+      <div class="sb-label">Tutor</div>
+      <div class="sb-item">Live Tutor</div>
+      <div class="sb-item">Full Session</div>
+      <div class="sb-label">Library</div>
+      <div class="sb-item active"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2.5h6.5L13 6v7a.5.5 0 01-.5.5h-9a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/></svg>Subjects</div>
+      <div class="sb-item">Saved</div>
+      <div class="sb-item">History</div>
+      <div class="sb-label">Pinned</div>
+      <div class="sb-item" style="padding-left: 18px;"><span class="pin" style="background:#C2410C;"></span>Organic Chemistry</div>
+      <div class="sb-item" style="padding-left: 18px;"><span class="pin" style="background:#15803D;"></span>Calculus II</div>
+    </div>
+  </aside>
+
+  <!-- Main: Subject Dashboard -->
+  <main class="main">
+    <div class="crumbs">
+      <a>Subjects</a>
+      <span style="color: var(--text-subtle);">/</span>
+      <span>Organic Chemistry</span>
+    </div>
+
+    <!-- Subject header -->
+    <div class="sub-header">
+      <div class="sub-icon">🧪</div>
+      <div class="sub-info">
+        <h1>Organic Chemistry</h1>
+        <div class="sub-goal">Goal: <a>Pass CHEM 2310 final with a B+ or better</a></div>
+      </div>
+      <div class="sub-actions">
+        <button class="btn btn-ghost"><svg viewBox="0 0 14 14" fill="none"><circle cx="3" cy="7" r="1" fill="currentColor"/><circle cx="7" cy="7" r="1" fill="currentColor"/><circle cx="11" cy="7" r="1" fill="currentColor"/></svg></button>
+        <button class="btn btn-secondary">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add file
+        </button>
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 4.5l4 2.5-4 2.5z" fill="currentColor"/></svg>
+          Start session
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Time studied</div>
+        <div class="stat-value">14<span class="stat-unit">hrs</span><span class="stat-unit">22m</span></div>
+        <div class="stat-trend">↑ 2.3 hrs this week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Sessions</div>
+        <div class="stat-value">23</div>
+        <div class="stat-trend">↑ 4 this week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Concepts covered</div>
+        <div class="stat-value">17<span class="stat-unit">/ 32</span></div>
+        <div class="stat-trend warn">8 need review</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Files</div>
+        <div class="stat-value">12</div>
+        <div class="stat-trend">3 unprocessed</div>
+      </div>
+    </div>
+
+    <!-- Body grid -->
+    <div class="body">
+
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Recent activity -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">Recent activity</div>
+            <a class="section-link">View all</a>
+          </div>
+          <div class="activity-list">
+            <div class="activity-row">
+              <div class="activity-icon tutor"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5a3 3 0 00-3 3v4a3 3 0 006 0v-4a3 3 0 00-3-3z" stroke="currentColor" stroke-width="1.3"/><path d="M3 8.5a5 5 0 0010 0M8 13.5v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <div>
+                <div class="activity-title">SN1 vs SN2 mechanisms</div>
+                <div class="activity-meta">Live Tutor · 12 min · 2 hours ago</div>
+              </div>
+              <button class="btn btn-ghost" style="padding: 5px 10px; font-size: 12px;">Resume</button>
+            </div>
+            <div class="activity-row">
+              <div class="activity-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2.5h7l3 3V13a.5.5 0 01-.5.5h-9.5a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/></svg></div>
+              <div>
+                <div class="activity-title">Chapter 8 reading walk-through</div>
+                <div class="activity-meta">Full Session · 38 min · yesterday</div>
+              </div>
+              <button class="btn btn-ghost" style="padding: 5px 10px; font-size: 12px;">View</button>
+            </div>
+            <div class="activity-row">
+              <div class="activity-icon note"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2.5h7l3 3V13a.5.5 0 01-.5.5h-9.5a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 8h5M5.5 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <div>
+                <div class="activity-title">Lecture 12 notes summarized</div>
+                <div class="activity-meta">Note Summarizer · 2 days ago</div>
+              </div>
+              <button class="btn btn-ghost" style="padding: 5px 10px; font-size: 12px;">Open</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Concepts covered -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">Concepts covered</div>
+            <span class="concept-meta">Hover for review status</span>
+          </div>
+          <div class="concept-grid">
+            <span class="concept"><span class="concept-strength strong"></span>Hybridization</span>
+            <span class="concept"><span class="concept-strength strong"></span>Functional groups</span>
+            <span class="concept"><span class="concept-strength strong"></span>Nomenclature</span>
+            <span class="concept"><span class="concept-strength medium"></span>Stereochemistry</span>
+            <span class="concept"><span class="concept-strength weak"></span>SN1 mechanism</span>
+            <span class="concept"><span class="concept-strength weak"></span>SN2 mechanism</span>
+            <span class="concept"><span class="concept-strength medium"></span>E1 elimination</span>
+            <span class="concept"><span class="concept-strength medium"></span>E2 elimination</span>
+            <span class="concept"><span class="concept-strength weak"></span>Carbocation stability</span>
+            <span class="concept"><span class="concept-strength strong"></span>Lewis structures</span>
+          </div>
+        </section>
+
+        <!-- Files -->
+        <section class="section">
+          <div class="section-head">
+            <div class="section-title">Files</div>
+            <a class="section-link">+ Add file</a>
+          </div>
+          <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px;">
+            <div class="file-row">
+              <div class="file-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 1.5h6l3 3V12a.5.5 0 01-.5.5h-8a.5.5 0 01-.5-.5V2a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/></svg></div>
+              <div>
+                <div class="file-name">Chapter 8 - Substitution Reactions.pdf</div>
+                <div class="file-meta">PDF · 4.2 MB · added Apr 26</div>
+              </div>
+              <span class="file-meta">3 sessions</span>
+            </div>
+            <div class="file-row">
+              <div class="file-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 1.5h6l3 3V12a.5.5 0 01-.5.5h-8a.5.5 0 01-.5-.5V2a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/></svg></div>
+              <div>
+                <div class="file-name">Lecture 12 — Stereochem.pdf</div>
+                <div class="file-meta">PDF · 2.8 MB · added Apr 24</div>
+              </div>
+              <span class="file-meta">2 sessions</span>
+            </div>
+            <div class="file-row">
+              <div class="file-icon"><svg viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/></svg></div>
+              <div>
+                <div class="file-name">Whiteboard photo - Newman projections.jpg</div>
+                <div class="file-meta">Image · 1.1 MB · added Apr 22</div>
+              </div>
+              <span class="file-meta">1 session</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- Deadline -->
+        <div class="aside-card">
+          <div class="aside-card-title">Final exam</div>
+          <div class="deadline">
+            <div class="deadline-num">19</div>
+            <div class="deadline-unit">days left</div>
+            <div class="deadline-date">Tuesday, May 19 · 9:00 AM</div>
+            <div class="deadline-bar"><span></span></div>
+            <div class="deadline-meta"><span>62% of plan complete</span><span>17 / 32 topics</span></div>
+          </div>
+        </div>
+
+        <!-- Suggested next -->
+        <div class="aside-card">
+          <div class="aside-card-title">Suggested next</div>
+          <div class="suggest-list">
+            <div class="suggest">
+              <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 4.5l4 2.5-4 2.5z" fill="currentColor"/></svg>
+              Review SN1 mechanism
+              <span class="arrow">→</span>
+            </div>
+            <div class="suggest">
+              <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 4.5l4 2.5-4 2.5z" fill="currentColor"/></svg>
+              Quiz: carbocation stability
+              <span class="arrow">→</span>
+            </div>
+            <div class="suggest">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M3 2.5h7l3 3V13a.5.5 0 01-.5.5h-9.5a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5z" stroke="currentColor" stroke-width="1.3"/></svg>
+              Read: Chapter 9 (E1/E2 reactions)
+              <span class="arrow">→</span>
+            </div>
+            <div class="suggest">
+              <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/></svg>
+              New topic: Alcohols &amp; ethers
+              <span class="arrow">→</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teaching style -->
+        <div class="aside-card">
+          <div class="aside-card-title">Teaching style</div>
+          <div style="font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 10px;">
+            Socratic · asks questions to guide me
+          </div>
+          <button class="btn btn-ghost" style="padding: 6px 0; font-size: 12px;">Change style →</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup · Onboarding flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg: #FBF8F1; --surface: #FFFFFF; --surface-2: #F5F1E7; --surface-3: #EDE7D5;
+  --border: #E8E1CD; --border-strong: #D4C9AE;
+  --text: #1F1C18; --text-muted: #615A4C; --text-subtle: #8A8170;
+  --accent: #C2410C; --accent-hover: #EA580C;
+  --accent-soft: rgba(194,65,12,0.08); --accent-fg: #FBF8F1;
+  --sage: #15803D; --warn: #B45309; --danger: #B91C1C;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease: cubic-bezier(0.22,1,0.36,1);
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+}
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+button { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+input, select, textarea { font-family: inherit; color: inherit; background: transparent; border: 0; outline: 0; font-size: inherit; }
+
+/* ━━━━━━━━━━ TOP BAR ━━━━━━━━━━ */
+.top-bar {
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 36px 20px;
+  position: relative;
+  gap: 14px;
+}
+.top-progress {
+  display: flex; align-items: center; gap: 10px;
+}
+.dot {
+  width: 32px; height: 3px; background: var(--border-strong);
+  border-radius: 100px; transition: background 0.3s;
+}
+.dot.on { background: var(--accent); }
+.dot.done { background: var(--text-muted); }
+.top-step-meta {
+  position: absolute; right: 36px; top: 50%; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* ━━━━━━━━━━ STEP CONTAINER ━━━━━━━━━━ */
+.step {
+  flex: 1;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px 36px 40px;
+  animation: fadeIn 0.35s var(--ease);
+}
+.step.active { display: flex; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step-inner {
+  width: 100%; max-width: 720px;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 18px; font-weight: 500;
+}
+.eyebrow::before { content:''; width:24px; height:1px; background: var(--accent); }
+.headline {
+  font-family: 'Crimson Pro', Georgia, serif; font-weight: 400;
+  font-size: 48px; line-height: 1.05; letter-spacing: -0.025em;
+  color: var(--text); margin-bottom: 16px;
+}
+.headline .accent { color: var(--accent); }
+.sub {
+  font-size: 15.5px; color: var(--text-muted);
+  max-width: 520px; margin-bottom: 36px; line-height: 1.6;
+}
+
+/* ━━━━━━━━━━ FOOTER ━━━━━━━━━━ */
+.foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 36px 28px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 22px; font-size: 14px; font-weight: 500;
+  border-radius: 4px; border: 1px solid transparent;
+  cursor: pointer; font-family: inherit;
+  letter-spacing: 0.005em; transition: all 0.2s var(--ease);
+}
+.btn-primary {
+  background: var(--text); color: var(--bg); border-color: var(--text);
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #FBF8F1; }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; background: var(--text); border-color: var(--text); color: var(--bg); }
+.btn-primary:disabled:hover { background: var(--text); border-color: var(--text); }
+.btn-secondary {
+  background: var(--surface); color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--text-subtle); }
+.btn-ghost { color: var(--text-muted); }
+.btn-ghost:hover { color: var(--text); }
+.btn svg { width: 13px; height: 13px; }
+
+/* ━━━━━━━━━━ FORM ━━━━━━━━━━ */
+.field { margin-bottom: 20px; }
+.label {
+  display: block; font-size: 12.5px; font-weight: 500;
+  color: var(--text); margin-bottom: 7px;
+}
+.input, .select {
+  width: 100%; padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  font-size: 14.5px; color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus, .select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input::placeholder { color: var(--text-subtle); }
+.select {
+  appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'><path d='M1 1l4 4 4-4' stroke='%238A8170' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+.field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* Pill grid */
+.pill-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.pill {
+  padding: 9px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 100px;
+  font-size: 13.5px; color: var(--text);
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+}
+.pill:hover { border-color: var(--text-subtle); }
+.pill.selected {
+  background: var(--text); color: var(--bg); border-color: var(--text);
+}
+
+/* Style choice cards */
+.style-grid { display: flex; flex-direction: column; gap: 10px; }
+.style-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+}
+.style-card:hover { border-color: var(--border-strong); }
+.style-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.style-radio {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  flex-shrink: 0; margin-top: 2px;
+  position: relative; transition: border-color 0.15s;
+}
+.style-card.selected .style-radio { border-color: var(--accent); }
+.style-card.selected .style-radio::after {
+  content:''; position: absolute; inset: 3px;
+  background: var(--accent); border-radius: 50%;
+}
+.style-body { flex: 1; }
+.style-title {
+  font-size: 14.5px; font-weight: 600; color: var(--text);
+  margin-bottom: 3px;
+}
+.style-desc {
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ━━━━━━━━━━ STEP 2 (Permissions) ━━━━━━━━━━ */
+.perm-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 18px;
+}
+.perm-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  display: flex; flex-direction: column;
+  transition: border-color 0.2s;
+}
+.perm-card.granted { border-color: var(--sage); }
+.perm-card.denied { border-color: var(--danger); }
+.perm-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid; place-items: center;
+  margin-bottom: 14px;
+}
+.perm-icon svg { width: 20px; height: 20px; }
+.perm-card.granted .perm-icon { background: rgba(21,128,61,0.10); color: var(--sage); }
+.perm-card.denied .perm-icon { background: rgba(185,28,28,0.10); color: var(--danger); }
+.perm-title {
+  font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--text); margin-bottom: 4px; letter-spacing: -0.01em;
+}
+.perm-desc {
+  font-size: 13px; color: var(--text-muted); line-height: 1.55;
+  margin-bottom: 14px; flex: 1;
+}
+.perm-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  color: var(--text-subtle);
+  margin-top: 6px;
+}
+.perm-status.ok { color: var(--sage); }
+.perm-status.err { color: var(--danger); }
+.perm-status .check {
+  width: 14px; height: 14px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 9px; color: #fff;
+}
+.perm-status.ok .check { background: var(--sage); }
+.perm-status.err .check { background: var(--danger); }
+.perm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 9px 14px;
+  background: var(--text); color: var(--bg);
+  border-radius: 4px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.perm-btn:hover { background: var(--accent-hover); color: #FBF8F1; }
+.perm-btn:disabled { opacity: 0.5; cursor: default; }
+.perm-btn svg { width: 13px; height: 13px; }
+.privacy-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 14px 18px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.55;
+}
+.privacy-note svg { width: 14px; height: 14px; color: var(--text-subtle); flex-shrink: 0; margin-top: 2px; }
+.privacy-note strong { color: var(--text); }
+
+/* ━━━━━━━━━━ STEP 4 (Tutorial) — MIRRORS REAL APP ━━━━━━━━━━ */
+.tut-frame {
+  position: relative;
+  width: 100%; max-width: 1080px;
+  margin: 0 auto;
+}
+.tut-app {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid; grid-template-columns: 222px 1fr;
+  height: 540px;
+  box-shadow: 0 20px 60px rgba(31,28,24,0.08);
+}
+
+/* Sidebar — exactly like real app */
+.tut-sb {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 18px 0 14px;
+}
+.tut-sb-brand { padding: 4px 18px 16px; display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 17px; }
+.tut-sb-brand-dot { width: 22px; height: 22px; border-radius: 4px; background: var(--text); }
+.tut-sb-search {
+  margin: 0 10px 14px; padding: 7px 11px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; font-size: 12px; color: var(--text-subtle);
+  display: flex; align-items: center; gap: 8px;
+}
+.tut-sb-search svg { width: 11px; height: 11px; }
+.tut-sb-search .kbd {
+  margin-left: auto; font-family: var(--mono); font-size: 9px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  padding: 1px 5px; border-radius: 3px; color: var(--text-subtle);
+}
+.tut-sb-section { padding: 0 8px; margin-bottom: 12px; }
+.tut-sb-label {
+  padding: 4px 12px 3px; font-family: var(--mono); font-size: 9.5px;
+  color: var(--text-subtle); letter-spacing: 0.12em; text-transform: uppercase;
+}
+.tut-sb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 12px; margin: 1px 0;
+  font-size: 12.5px; color: var(--text-muted);
+  border-radius: 5px;
+}
+.tut-sb-item.active { background: var(--accent-soft); color: var(--accent); }
+.tut-sb-item svg { width: 12px; height: 12px; }
+.tut-sb-foot {
+  margin-top: auto; padding: 12px 12px 0;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.tut-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #B45309);
+  color: #FBF8F1;
+  display: grid; place-items: center;
+  font-weight: 600; font-size: 10px;
+}
+.tut-foot-name { font-size: 12px; color: var(--text); }
+.tut-foot-email { font-size: 10px; color: var(--text-subtle); }
+
+/* Main: Live Tutor stage — exactly like real app */
+.tut-main {
+  display: flex; flex-direction: column;
+  position: relative;
+  background: var(--bg);
+}
+.tut-stage {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 32px;
+}
+.tut-stage-inner {
+  width: 100%; max-width: 420px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 22px; text-align: center;
+}
+.tut-orb {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  display: grid; place-items: center;
+  position: relative;
+}
+.tut-orb::before, .tut-orb::after {
+  content:''; position: absolute; inset: -10px;
+  border: 1px solid var(--accent-soft); border-radius: 50%;
+  animation: ripple 3s ease-out infinite;
+}
+.tut-orb::after { animation-delay: 1.5s; }
+@keyframes ripple { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+.tut-orb svg { width: 30px; height: 30px; }
+.tut-status h2 {
+  font-family: var(--serif); font-weight: 400; font-size: 22px;
+  color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px;
+}
+.tut-status p { font-size: 12.5px; color: var(--text-muted); }
+.tut-actions { display: flex; gap: 8px; }
+.tut-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; font-size: 13px; font-weight: 500;
+  border-radius: 4px; border: 1px solid transparent;
+  cursor: pointer;
+}
+.tut-btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.tut-btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+.tut-btn svg { width: 11px; height: 11px; }
+
+/* Tour overlay */
+.tour-spot { position: absolute; z-index: 10; pointer-events: none; }
+.tour-ring {
+  position: absolute;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  animation: ringPulse 1.6s ease-out infinite;
+  box-shadow: 0 0 0 6px var(--accent-soft);
+}
+@keyframes ringPulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.8; }
+}
+.tour-ring.circle { border-radius: 50%; }
+.tour-callout {
+  position: absolute;
+  background: var(--text); color: var(--bg);
+  padding: 14px 16px;
+  border-radius: 8px;
+  width: 250px;
+  font-size: 13px; line-height: 1.5;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  pointer-events: auto;
+}
+.tour-callout::after {
+  content:''; position: absolute;
+  width: 0; height: 0;
+  border: 6px solid transparent;
+}
+.tour-callout-title {
+  font-family: var(--serif); font-weight: 500; font-size: 14px;
+  margin-bottom: 4px; color: var(--bg);
+}
+.tour-callout-desc { color: rgba(251,248,241,0.78); font-size: 12.5px; }
+.tour-callout-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 12px;
+}
+.tour-step-num { font-family: var(--mono); font-size: 10px; color: rgba(251,248,241,0.5); letter-spacing: 0.1em; }
+.tour-next {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  background: rgba(251,248,241,0.1);
+  border: 1px solid rgba(251,248,241,0.18);
+  border-radius: 4px;
+  font-size: 12px; font-weight: 500; color: var(--bg);
+  cursor: pointer; transition: background 0.15s;
+}
+.tour-next:hover { background: rgba(251,248,241,0.18); }
+.tour-next svg { width: 11px; height: 11px; }
+.callout-down::after { top: -12px; left: 30px; border-bottom-color: var(--text); }
+.callout-up::after { bottom: -12px; left: 30px; border-top-color: var(--text); }
+.callout-left::after { left: -12px; top: 24px; border-right-color: var(--text); }
+.callout-right::after { right: -12px; top: 24px; border-left-color: var(--text); }
+
+.tour-hint {
+  margin-top: 14px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-subtle); letter-spacing: 0.06em;
+  text-align: center;
+}
+
+/* ━━━━━━━━━━ DONE ━━━━━━━━━━ */
+.done-card { text-align: center; }
+.done-check {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center;
+  margin: 0 auto 24px;
+}
+.done-check svg { width: 36px; height: 36px; }
+</style>
+</head>
+<body>
+
+<!-- ━━━━━━━━━━ TOP BAR ━━━━━━━━━━ -->
+<div class="top-bar">
+  <div class="top-progress">
+    <span class="dot on" id="d1"></span>
+    <span class="dot" id="d2"></span>
+    <span class="dot" id="d3"></span>
+  </div>
+  <div class="top-step-meta" id="step-counter">Step 1 of 3</div>
+</div>
+
+<!-- ━━━━━━━━━━ STEP 1: ABOUT YOU ━━━━━━━━━━ -->
+<section class="step active" data-step="1">
+  <div class="step-inner">
+    <div class="eyebrow">Tell us about you</div>
+    <h2 class="headline">Where are you in your <span class="accent">studies?</span></h2>
+    <p class="sub">This helps your tutor pitch lessons at the right level. You can change anything later in Settings.</p>
+
+    <div class="field">
+      <label class="label">Grade level</label>
+      <select class="select req" id="grade" onchange="validate()">
+        <option value="">Select your grade…</option>
+        <option>Elementary</option>
+        <option>Middle school</option>
+        <option>High school</option>
+        <option>Bachelor's</option>
+        <option>Master's</option>
+        <option>PhD</option>
+        <option>Self-taught</option>
+      </select>
+    </div>
+
+    <div class="field-pair">
+      <div class="field">
+        <label class="label">School or institution</label>
+        <input class="input req" id="school" placeholder="e.g. Lincoln High School" oninput="validate()" />
+      </div>
+      <div class="field">
+        <label class="label">Country</label>
+        <select class="select req" id="country" onchange="validate()">
+          <option value="">Select your country…</option>
+          <option>Afghanistan</option>
+          <option>Albania</option>
+          <option>Algeria</option>
+          <option>Andorra</option>
+          <option>Angola</option>
+          <option>Antigua and Barbuda</option>
+          <option>Argentina</option>
+          <option>Armenia</option>
+          <option>Australia</option>
+          <option>Austria</option>
+          <option>Azerbaijan</option>
+          <option>Bahamas</option>
+          <option>Bahrain</option>
+          <option>Bangladesh</option>
+          <option>Barbados</option>
+          <option>Belarus</option>
+          <option>Belgium</option>
+          <option>Belize</option>
+          <option>Benin</option>
+          <option>Bhutan</option>
+          <option>Bolivia</option>
+          <option>Bosnia and Herzegovina</option>
+          <option>Botswana</option>
+          <option>Brazil</option>
+          <option>Brunei</option>
+          <option>Bulgaria</option>
+          <option>Burkina Faso</option>
+          <option>Burundi</option>
+          <option>Cabo Verde</option>
+          <option>Cambodia</option>
+          <option>Cameroon</option>
+          <option>Canada</option>
+          <option>Central African Republic</option>
+          <option>Chad</option>
+          <option>Chile</option>
+          <option>China</option>
+          <option>Colombia</option>
+          <option>Comoros</option>
+          <option>Congo (Brazzaville)</option>
+          <option>Congo (Kinshasa)</option>
+          <option>Costa Rica</option>
+          <option>Côte d'Ivoire</option>
+          <option>Croatia</option>
+          <option>Cuba</option>
+          <option>Cyprus</option>
+          <option>Czechia</option>
+          <option>Denmark</option>
+          <option>Djibouti</option>
+          <option>Dominica</option>
+          <option>Dominican Republic</option>
+          <option>Ecuador</option>
+          <option>Egypt</option>
+          <option>El Salvador</option>
+          <option>Equatorial Guinea</option>
+          <option>Eritrea</option>
+          <option>Estonia</option>
+          <option>Eswatini</option>
+          <option>Ethiopia</option>
+          <option>Fiji</option>
+          <option>Finland</option>
+          <option>France</option>
+          <option>Gabon</option>
+          <option>Gambia</option>
+          <option>Georgia</option>
+          <option>Germany</option>
+          <option>Ghana</option>
+          <option>Greece</option>
+          <option>Grenada</option>
+          <option>Guatemala</option>
+          <option>Guinea</option>
+          <option>Guinea-Bissau</option>
+          <option>Guyana</option>
+          <option>Haiti</option>
+          <option>Honduras</option>
+          <option>Hungary</option>
+          <option>Iceland</option>
+          <option>India</option>
+          <option>Indonesia</option>
+          <option>Iran</option>
+          <option>Iraq</option>
+          <option>Ireland</option>
+          <option>Israel</option>
+          <option>Italy</option>
+          <option>Jamaica</option>
+          <option>Japan</option>
+          <option>Jordan</option>
+          <option>Kazakhstan</option>
+          <option>Kenya</option>
+          <option>Kiribati</option>
+          <option>Kuwait</option>
+          <option>Kyrgyzstan</option>
+          <option>Laos</option>
+          <option>Latvia</option>
+          <option>Lebanon</option>
+          <option>Lesotho</option>
+          <option>Liberia</option>
+          <option>Libya</option>
+          <option>Liechtenstein</option>
+          <option>Lithuania</option>
+          <option>Luxembourg</option>
+          <option>Madagascar</option>
+          <option>Malawi</option>
+          <option>Malaysia</option>
+          <option>Maldives</option>
+          <option>Mali</option>
+          <option>Malta</option>
+          <option>Marshall Islands</option>
+          <option>Mauritania</option>
+          <option>Mauritius</option>
+          <option>Mexico</option>
+          <option>Micronesia</option>
+          <option>Moldova</option>
+          <option>Monaco</option>
+          <option>Mongolia</option>
+          <option>Montenegro</option>
+          <option>Morocco</option>
+          <option>Mozambique</option>
+          <option>Myanmar</option>
+          <option>Namibia</option>
+          <option>Nauru</option>
+          <option>Nepal</option>
+          <option>Netherlands</option>
+          <option>New Zealand</option>
+          <option>Nicaragua</option>
+          <option>Niger</option>
+          <option>Nigeria</option>
+          <option>North Korea</option>
+          <option>North Macedonia</option>
+          <option>Norway</option>
+          <option>Oman</option>
+          <option>Pakistan</option>
+          <option>Palau</option>
+          <option>Palestine</option>
+          <option>Panama</option>
+          <option>Papua New Guinea</option>
+          <option>Paraguay</option>
+          <option>Peru</option>
+          <option>Philippines</option>
+          <option>Poland</option>
+          <option>Portugal</option>
+          <option>Qatar</option>
+          <option>Romania</option>
+          <option>Russia</option>
+          <option>Rwanda</option>
+          <option>Saint Kitts and Nevis</option>
+          <option>Saint Lucia</option>
+          <option>Saint Vincent and the Grenadines</option>
+          <option>Samoa</option>
+          <option>San Marino</option>
+          <option>São Tomé and Príncipe</option>
+          <option>Saudi Arabia</option>
+          <option>Senegal</option>
+          <option>Serbia</option>
+          <option>Seychelles</option>
+          <option>Sierra Leone</option>
+          <option>Singapore</option>
+          <option>Slovakia</option>
+          <option>Slovenia</option>
+          <option>Solomon Islands</option>
+          <option>Somalia</option>
+          <option>South Africa</option>
+          <option>South Korea</option>
+          <option>South Sudan</option>
+          <option>Spain</option>
+          <option>Sri Lanka</option>
+          <option>Sudan</option>
+          <option>Suriname</option>
+          <option>Sweden</option>
+          <option>Switzerland</option>
+          <option>Syria</option>
+          <option>Taiwan</option>
+          <option>Tajikistan</option>
+          <option>Tanzania</option>
+          <option>Thailand</option>
+          <option>Timor-Leste</option>
+          <option>Togo</option>
+          <option>Tonga</option>
+          <option>Trinidad and Tobago</option>
+          <option>Tunisia</option>
+          <option>Türkiye</option>
+          <option>Turkmenistan</option>
+          <option>Tuvalu</option>
+          <option>Uganda</option>
+          <option>Ukraine</option>
+          <option>United Arab Emirates</option>
+          <option>United Kingdom</option>
+          <option>United States</option>
+          <option>Uruguay</option>
+          <option>Uzbekistan</option>
+          <option>Vanuatu</option>
+          <option>Vatican City</option>
+          <option>Venezuela</option>
+          <option>Vietnam</option>
+          <option>Yemen</option>
+          <option>Zambia</option>
+          <option>Zimbabwe</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━ STEP 2: TEACHING STYLE ━━━━━━━━━━ -->
+<section class="step" data-step="2">
+  <div class="step-inner">
+    <div class="eyebrow">Teaching style</div>
+    <h2 class="headline">How do you want to be <span class="accent">taught?</span></h2>
+    <p class="sub">Pick the pace, depth, and style that suits you. The tutor will adapt every session, but this is the default.</p>
+
+    <div class="field">
+      <label class="label">Pace</label>
+      <div class="pill-grid" data-group="pace">
+        <button class="pill">Slow and thorough</button>
+        <button class="pill">Natural pace</button>
+        <button class="pill">Fast-paced</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Explanation depth</label>
+      <div class="pill-grid" data-group="depth">
+        <button class="pill">Like I'm 5</button>
+        <button class="pill">Beginner-friendly</button>
+        <button class="pill">High school level</button>
+        <button class="pill">College level</button>
+        <button class="pill">Expert-level detail</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Conversation style</label>
+      <div class="style-grid" data-group="style">
+        <div class="style-card">
+          <div class="style-radio"></div>
+          <div class="style-body">
+            <div class="style-title">Socratic</div>
+            <div class="style-desc">The tutor asks questions to guide you toward the answer instead of just giving it.</div>
+          </div>
+        </div>
+        <div class="style-card">
+          <div class="style-radio"></div>
+          <div class="style-body">
+            <div class="style-title">Direct</div>
+            <div class="style-desc">Clear explanations first, then the tutor quizzes you to check understanding.</div>
+          </div>
+        </div>
+        <div class="style-card">
+          <div class="style-radio"></div>
+          <div class="style-body">
+            <div class="style-title">Conversational</div>
+            <div class="style-desc">Like a friend who happens to know the material. Casual back-and-forth.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━ STEP 3: TUTORIAL ━━━━━━━━━━ -->
+<section class="step" data-step="3">
+  <div class="step-inner" style="max-width: 1100px;">
+    <div class="eyebrow">Quick tour</div>
+    <h2 class="headline" style="font-size: 38px;">A two-minute <span class="accent">walkthrough.</span></h2>
+    <p class="sub">Click through the spots highlighted on the app below. We'll show you the four things you'll use most.</p>
+
+    <div class="tut-frame">
+      <div class="tut-app">
+
+        <!-- Sidebar — mirrors real app -->
+        <aside class="tut-sb">
+          <div class="tut-sb-brand">
+            <div class="tut-sb-brand-dot"></div>
+            Leren
+          </div>
+          <div class="tut-sb-search" id="spot-search">
+            <svg viewBox="0 0 12 12" fill="none"><circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 8l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Search anything…
+            <span class="kbd">⌘K</span>
+          </div>
+
+          <div class="tut-sb-section" id="spot-nav">
+            <div class="tut-sb-label">Tutor</div>
+            <div class="tut-sb-item active">
+              <svg viewBox="0 0 14 14" fill="none"><path d="M7 1.5a2.5 2.5 0 00-2.5 2.5v3.5a2.5 2.5 0 005 0V4A2.5 2.5 0 007 1.5z" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 7.5a4.5 4.5 0 009 0M7 12v1.5M5 13.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Live Tutor
+            </div>
+            <div class="tut-sb-item">
+              <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
+              Full Session
+            </div>
+          </div>
+
+          <div class="tut-sb-section">
+            <div class="tut-sb-label">Tools</div>
+            <div class="tut-sb-item">Note Summarizer</div>
+            <div class="tut-sb-item">AI Translator</div>
+          </div>
+
+          <div class="tut-sb-section">
+            <div class="tut-sb-label">Library</div>
+            <div class="tut-sb-item">Subjects</div>
+            <div class="tut-sb-item">Saved</div>
+            <div class="tut-sb-item">History</div>
+            <div class="tut-sb-item">Archive</div>
+          </div>
+
+          <div class="tut-sb-foot">
+            <div class="tut-avatar">Y</div>
+            <div>
+              <div class="tut-foot-name">Your account</div>
+              <div class="tut-foot-email">you@example.com</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main: Live Tutor idle state -->
+        <main class="tut-main">
+          <div class="tut-stage">
+            <div class="tut-stage-inner">
+              <div class="tut-orb" id="spot-orb">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2a3 3 0 00-3 3v6a3 3 0 006 0V5a3 3 0 00-3-3z" stroke="currentColor" stroke-width="1.6"/><path d="M5 11a7 7 0 0014 0M12 18v3M8 21h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div class="tut-status">
+                <h2>Ready when you are.</h2>
+                <p>Speak naturally, share your screen, or type a question to begin.</p>
+              </div>
+              <div class="tut-actions" id="spot-actions">
+                <button class="tut-btn tut-btn-primary">
+                  <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 4.5l4 2.5-4 2.5z" fill="currentColor"/></svg>
+                  Start Session
+                </button>
+                <button class="tut-btn tut-btn-secondary">Continue with voice only</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- Tour overlay -->
+      <div class="tour-spot" id="tour-1">
+        <div class="tour-ring circle" style="top: 178px; left: 583px; width: 116px; height: 116px;"></div>
+        <div class="tour-callout callout-left" style="top: 200px; left: 720px;">
+          <div class="tour-callout-title">Your tutor is here</div>
+          <div class="tour-callout-desc">When the orb pulses, the tutor is listening. Just speak naturally to begin.</div>
+          <div class="tour-callout-foot">
+            <span class="tour-step-num">1 of 4</span>
+            <button class="tour-next" onclick="nextTour()">Next<svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-spot" id="tour-2" style="display:none;">
+        <div class="tour-ring" style="top: 360px; left: 480px; width: 320px; height: 44px;"></div>
+        <div class="tour-callout callout-up" style="top: 420px; left: 480px;">
+          <div class="tour-callout-title">Pick how to start</div>
+          <div class="tour-callout-desc"><strong style="color:var(--bg);">Start Session</strong> opens the share-screen prompt. <strong style="color:var(--bg);">Continue with voice only</strong> skips it.</div>
+          <div class="tour-callout-foot">
+            <span class="tour-step-num">2 of 4</span>
+            <button class="tour-next" onclick="nextTour()">Next<svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-spot" id="tour-3" style="display:none;">
+        <div class="tour-ring" style="top: 80px; left: 14px; width: 196px; height: 380px;"></div>
+        <div class="tour-callout callout-left" style="top: 240px; left: 226px;">
+          <div class="tour-callout-title">Move between tools</div>
+          <div class="tour-callout-desc">Live Tutor for chat, Full Session for guided document study, plus your library of saved work.</div>
+          <div class="tour-callout-foot">
+            <span class="tour-step-num">3 of 4</span>
+            <button class="tour-next" onclick="nextTour()">Next<svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-spot" id="tour-4" style="display:none;">
+        <div class="tour-ring" style="top: 56px; left: 12px; width: 198px; height: 32px;"></div>
+        <div class="tour-callout callout-down" style="top: 102px; left: 12px;">
+          <div class="tour-callout-title">Jump anywhere fast</div>
+          <div class="tour-callout-desc">Press <strong style="color:var(--bg);">⌘K</strong> from anywhere to search subjects, sessions, or jump to any screen.</div>
+          <div class="tour-callout-foot">
+            <span class="tour-step-num">4 of 4</span>
+            <button class="tour-next" onclick="finishTour()">Got it<svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 5-6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tour-hint" id="tour-hint">Click the highlighted spots to continue · 1 of 4</div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━ DONE ━━━━━━━━━━ -->
+<section class="step" data-step="4">
+  <div class="step-inner done-card">
+    <div class="done-check">
+      <svg viewBox="0 0 36 36" fill="none"><path d="M9 18l6 6 12-14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2 class="headline" style="text-align:center;">You're all <span class="accent">set.</span></h2>
+    <p class="sub" style="margin: 0 auto 32px; text-align:center;">Your tutor is ready. Open Leren and start your first real session whenever you are.</p>
+    <button class="btn btn-primary" style="padding: 14px 32px; font-size: 15px;" onclick="alert('Welcome to Leren!')">
+      Open Leren
+      <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ━━━━━━━━━━ FOOTER ━━━━━━━━━━ -->
+<div class="foot" id="foot">
+  <button class="btn btn-ghost" id="back-btn" onclick="prevStep()" style="visibility:hidden;">
+    <svg viewBox="0 0 14 14" fill="none"><path d="M12 7H2M7 2L2 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back
+  </button>
+  <button class="btn btn-primary" id="next-btn" onclick="nextStep()" disabled>
+    Continue
+    <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<script>
+const KEY = 'leren-onboarding-v1';
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) { return {}; }
+}
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      current, state,
+      grade: document.getElementById('grade')?.value || '',
+      school: document.getElementById('school')?.value || '',
+      country: document.getElementById('country')?.value || '',
+      pacePick: document.querySelector('[data-group="pace"] .pill.selected')?.textContent || '',
+      depthPick: document.querySelector('[data-group="depth"] .pill.selected')?.textContent || '',
+      stylePick: document.querySelector('[data-group="style"] .style-card.selected .style-title')?.textContent || ''
+    }));
+  } catch(e){}
+}
+
+const saved = load();
+let current = saved.current || 1;
+const TOTAL = 3;
+if (current > TOTAL + 1) current = 1;
+const state = saved.state || {
+  pace: false, depth: false, style: false,
+  tourDone: false
+};
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+  document.getElementById('step-counter').textContent = n <= TOTAL ? `Step ${n} of ${TOTAL}` : 'Done';
+
+  for (let i = 1; i <= TOTAL; i++) {
+    const d = document.getElementById('d' + i);
+    d.classList.remove('on', 'done');
+    if (i < n) d.classList.add('done');
+    else if (i === n) d.classList.add('on');
+  }
+
+  document.getElementById('back-btn').style.visibility = (n > 1 && n <= TOTAL) ? 'visible' : 'hidden';
+  document.getElementById('foot').style.display = n > TOTAL ? 'none' : 'flex';
+
+  const next = document.getElementById('next-btn');
+  if (n === TOTAL) {
+    next.innerHTML = `Finish <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  } else {
+    next.innerHTML = `Continue <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+  validate();
+}
+
+function validate() {
+  const next = document.getElementById('next-btn');
+  let ok = false;
+  if (current === 1) {
+    ok = !!document.getElementById('grade').value && !!document.getElementById('school').value.trim() && !!document.getElementById('country').value;
+  } else if (current === 2) {
+    ok = state.pace && state.depth && state.style;
+  } else if (current === 3) {
+    ok = state.tourDone;
+  }
+  next.disabled = !ok;
+  save();
+}
+
+function nextStep() {
+  if (document.getElementById('next-btn').disabled) return;
+  if (current === TOTAL) { current = TOTAL + 1; showStep(current); return; }
+  current++;
+  showStep(current);
+  if (current === 3) resetTour();
+}
+function prevStep() {
+  if (current > 1) { current--; showStep(current); }
+}
+
+// Pill / style selectors
+document.querySelectorAll('.pill-grid').forEach(grid => {
+  const group = grid.dataset.group;
+  grid.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      grid.querySelectorAll('.pill').forEach(x => x.classList.remove('selected'));
+      p.classList.add('selected');
+      state[group] = true; validate();
+    });
+  });
+});
+document.querySelectorAll('.style-grid').forEach(grid => {
+  const group = grid.dataset.group;
+  grid.querySelectorAll('.style-card').forEach(c => {
+    c.addEventListener('click', () => {
+      grid.querySelectorAll('.style-card').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      state[group] = true; validate();
+    });
+  });
+});
+
+// Tour
+let tourStep = 1;
+const TOUR_TOTAL = 4;
+function resetTour() {
+  tourStep = 1;
+  state.tourDone = false; validate();
+  for (let i = 1; i <= TOUR_TOTAL; i++) {
+    const el = document.getElementById('tour-' + i);
+    if (el) el.style.display = i === 1 ? 'block' : 'none';
+  }
+  document.getElementById('tour-hint').textContent = `Click the highlighted spots to continue · 1 of ${TOUR_TOTAL}`;
+}
+function nextTour() {
+  document.getElementById('tour-' + tourStep).style.display = 'none';
+  tourStep++;
+  if (tourStep <= TOUR_TOTAL) {
+    document.getElementById('tour-' + tourStep).style.display = 'block';
+    document.getElementById('tour-hint').textContent = `Click the highlighted spots to continue · ${tourStep} of ${TOUR_TOTAL}`;
+  }
+}
+function finishTour() {
+  document.getElementById('tour-' + tourStep).style.display = 'none';
+  state.tourDone = true;
+  document.getElementById('tour-hint').textContent = 'Tour complete · click Finish to open Leren';
+  validate();
+}
+
+// ━━━━━━━━━━ RESTORE ON LOAD ━━━━━━━━━━
+window.addEventListener('DOMContentLoaded', () => {
+  // Restore form fields
+  if (saved.grade) document.getElementById('grade').value = saved.grade;
+  if (saved.school) document.getElementById('school').value = saved.school;
+  if (saved.country) document.getElementById('country').value = saved.country;
+
+  // Restore pill picks
+  ['pace','depth','style'].forEach(group => {
+    const pickKey = group + 'Pick';
+    if (!saved[pickKey]) return;
+    if (group === 'style') {
+      document.querySelectorAll('[data-group="style"] .style-card').forEach(c => {
+        if (c.querySelector('.style-title').textContent === saved[pickKey]) c.classList.add('selected');
+      });
+    } else {
+      document.querySelectorAll(`[data-group="${group}"] .pill`).forEach(p => {
+        if (p.textContent === saved[pickKey]) p.classList.add('selected');
+      });
+    }
+  });
+
+  // Restore current step
+  showStep(current);
+  if (current === 3 && !state.tourDone) resetTour();
+  if (current === 3 && state.tourDone) {
+    document.getElementById('tour-hint').textContent = 'Tour complete · click Finish to open Leren';
+    document.querySelectorAll('.tour-spot').forEach(s => s.style.display = 'none');
+  }
+});
+
+// Save on every input change in step 1
+['grade','school','country'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', save);
+  document.getElementById(id)?.addEventListener('input', save);
+});
+</script>
+</body>
+</html>
