@@ -3103,18 +3103,8 @@ document.querySelectorAll('[data-set-group]').forEach(grid => {
   });
 });
 
-// ════════ AUTH-STATE GATE ON LOAD ════════
-try {
-  const authed = localStorage.getItem('leren-auth') === '1';
-  const onboarded = localStorage.getItem('leren-onboarded') === '1';
-  if (authed) {
-    document.getElementById('splash').classList.add('hidden');
-    if (!onboarded) {
-      document.getElementById('onboarding').classList.add('active');
-      obShow(1);
-    }
-  }
-} catch(e){}
+// ════════ ALWAYS SHOW WELCOME ON LOAD ════════
+// Splash is always the first thing seen — no auto-skip
 window.addEventListener('DOMContentLoaded', hydrateProfile);
 function logOut() { openModal('logout-confirm'); }
 function confirmLogOut() {
@@ -3135,11 +3125,8 @@ document.querySelectorAll('#splash button[onclick*="splash"]').forEach(btn => {
   btn.setAttribute('onclick', 'dismissSplash()');
 });
 
-// Restore auth + screen on load
+// Restore last visited screen (sidebar nav state only — splash still shows on load)
 try {
-  if (localStorage.getItem('leren-auth') === '1') {
-    document.getElementById('splash').classList.add('hidden');
-  }
   const savedScreen = localStorage.getItem('leren-screen');
   if (savedScreen) go(savedScreen);
 } catch(e){}
