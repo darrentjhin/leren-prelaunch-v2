@@ -2936,6 +2936,58 @@ function saveProfile(patch) {
 let obCurrent = 1;
 const OB_TOTAL = 3;
 const obState = { pace: '', depth: '', style: '', tourDone: false };
+const OB_STATE_KEY = 'leren-onboarding-state';
+
+function saveOnboardingState() {
+  try {
+    const data = {
+      step: obCurrent,
+      grade: document.getElementById('ob-grade')?.value || '',
+      school: document.getElementById('ob-school')?.value || '',
+      country: document.getElementById('ob-country')?.value || '',
+      pace: obState.pace,
+      depth: obState.depth,
+      style: obState.style,
+      tourDone: obState.tourDone
+    };
+    localStorage.setItem(OB_STATE_KEY, JSON.stringify(data));
+  } catch(e){}
+}
+function restoreOnboardingState() {
+  try {
+    const raw = localStorage.getItem(OB_STATE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    // Restore form fields
+    if (document.getElementById('ob-grade')) document.getElementById('ob-grade').value = data.grade || '';
+    if (document.getElementById('ob-school')) document.getElementById('ob-school').value = data.school || '';
+    if (document.getElementById('ob-country')) document.getElementById('ob-country').value = data.country || '';
+    // Restore selections
+    obState.pace = data.pace || '';
+    obState.depth = data.depth || '';
+    obState.style = data.style || '';
+    obState.tourDone = data.tourDone || false;
+    // Highlight selected pills/cards
+    document.querySelectorAll('.ob-pill-grid').forEach(grid => {
+      const group = grid.dataset.obGroup;
+      grid.querySelectorAll('.ob-pill').forEach(p => {
+        p.classList.toggle('selected', p.textContent === obState[group]);
+      });
+    });
+    document.querySelectorAll('.ob-style-grid').forEach(grid => {
+      const group = grid.dataset.obGroup;
+      grid.querySelectorAll('.ob-style-card').forEach(c => {
+        c.classList.toggle('selected', c.querySelector('.ob-style-title').textContent === obState[group]);
+      });
+    });
+    // Show the saved step
+    obShow(data.step || 1);
+    return true;
+  } catch(e){ return false; }
+}
+function clearOnboardingState() {
+  try { localStorage.removeItem(OB_STATE_KEY); } catch(e){}
+}
 
 function obShow(n) {
   obCurrent = n;
@@ -2954,8 +3006,9 @@ function obShow(n) {
   next.innerHTML = n === OB_TOTAL
     ? `Finish <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
     : `Continue <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  if (n === 3) obResetTour();
+  if (n === 3 && !obState.tourDone) obResetTour();
   obValidate();
+  saveOnboardingState();
 }
 function obValidate() {
   const next = document.getElementById('ob-next');
@@ -2970,6 +3023,7 @@ function obValidate() {
     ok = obState.tourDone;
   }
   next.disabled = !ok;
+  saveOnboardingState();
 }
 function obNext() {
   if (document.getElementById('ob-next').disabled) return;
@@ -3036,6 +3090,7 @@ function obSignOut() {
     localStorage.removeItem('leren-onboarded');
     localStorage.removeItem('leren-profile');
     localStorage.removeItem('leren-screen');
+    localStorage.removeItem(OB_STATE_KEY);
     sessionStorage.removeItem('leren-session');
   } catch(e){}
   document.getElementById('onboarding').classList.remove('active');
@@ -3054,6 +3109,7 @@ function obFinish() {
     style: obState.style
   });
   try { localStorage.setItem('leren-onboarded', '1'); sessionStorage.setItem('leren-session', '1'); } catch(e){}
+  clearOnboardingState();
   document.getElementById('onboarding').classList.remove('active');
   hydrateProfile();
 }
@@ -3117,7 +3173,8 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('splash').classList.add('hidden');
       if (!onboarded) {
         document.getElementById('onboarding').classList.add('active');
-        obShow(1);
+        // Restore in-progress onboarding step + answers, fall back to step 1
+        if (!restoreOnboardingState()) obShow(1);
       } else {
         // restore whatever page they were on
         const savedScreen = localStorage.getItem('leren-screen');
@@ -3134,6 +3191,7 @@ function confirmLogOut() {
     localStorage.removeItem('leren-screen');
     localStorage.removeItem('leren-onboarded');
     localStorage.removeItem('leren-profile');
+    localStorage.removeItem(OB_STATE_KEY);
     sessionStorage.removeItem('leren-session');
   } catch(e){}
   document.getElementById('splash').classList.remove('hidden');
