@@ -1661,9 +1661,68 @@ img { display: block; max-width: 100%; }
         </svg>
       </button>
     </div>
+    <p style="font-size:12px;color:#8A8170;text-align:center;margin-top:4px;">Quick sign-in via saved account</p>
   </div>
 
   <div class="auth-foot">
+    By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ SIGN IN SCREEN -->
+<div class="auth-method-screen" id="sign-in-screen">
+  <button class="auth-method-back" onclick="backToSplashFromSignIn()">
+    <svg viewBox="0 0 14 14" fill="none"><path d="M10 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back
+  </button>
+
+  <div class="auth-method-card">
+    <div class="auth-method-eyebrow">Sign in</div>
+    <h2 class="auth-method-headline">Welcome <span class="accent">back.</span></h2>
+    <p class="auth-method-sub">Sign in to pick up right where you left off.</p>
+
+    <div class="auth-method-oauth">
+      <button class="auth-method-oauth-btn" onclick="completeSignIn()">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+          <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+          <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+          <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <button class="auth-method-oauth-btn" onclick="completeSignIn()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1F1C18" d="M16.365 1.43c0 1.14-.4 2.23-1.18 3.05-.78.83-2.04 1.46-3.07 1.38-.13-1.1.4-2.27 1.13-3.04.83-.86 2.21-1.5 3.12-1.39zM20.5 17.42c-.55 1.27-.81 1.84-1.52 2.96-.99 1.55-2.39 3.49-4.13 3.5-1.55.02-1.95-1.01-4.05-1-2.1.01-2.54 1.02-4.09 1-1.74-.02-3.06-1.77-4.05-3.32C.78 17.5-.05 12.7 1.62 9.45c1.16-2.27 3-3.71 4.74-3.71 1.78 0 2.9 1.04 4.4 1.04 1.45 0 2.34-1.04 4.42-1.04 1.55 0 3.2.84 4.36 2.31-3.83 2.1-3.21 7.6.96 9.37z"/>
+        </svg>
+        Continue with Apple
+      </button>
+      <button class="auth-method-oauth-btn" onclick="completeSignIn()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#F25022" d="M1 1h10v10H1z"/>
+          <path fill="#7FBA00" d="M13 1h10v10H13z"/>
+          <path fill="#00A4EF" d="M1 13h10v10H1z"/>
+          <path fill="#FFB900" d="M13 13h10v10H13z"/>
+        </svg>
+        Continue with Microsoft
+      </button>
+    </div>
+
+    <div class="auth-method-divider">or sign in with email</div>
+
+    <div class="auth-method-field">
+      <label class="auth-method-label">Email address</label>
+      <input class="auth-method-input" id="si-email" type="email" placeholder="you@example.com" autocomplete="email" oninput="siValidate()" />
+    </div>
+    <div class="auth-method-field">
+      <label class="auth-method-label">Password</label>
+      <input class="auth-method-input" id="si-password" type="password" placeholder="Your password" autocomplete="current-password" oninput="siValidate()" />
+    </div>
+
+    <button class="auth-method-continue" id="si-continue" onclick="completeSignIn()" disabled>Sign in</button>
+  </div>
+
+  <div class="auth-method-foot">
     By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
   </div>
 </div>
@@ -2819,9 +2878,23 @@ function dismissSplash() {
   try { localStorage.setItem('leren-auth', '1'); } catch(e){}
 }
 function signIn() {
-  // existing user — skip onboarding
-  try { localStorage.setItem('leren-auth', '1'); localStorage.setItem('leren-onboarded', '1'); } catch(e){}
+  // show sign-in screen — user must enter credentials
   document.getElementById('splash').classList.add('hidden');
+  document.getElementById('sign-in-screen').classList.add('active');
+}
+function backToSplashFromSignIn() {
+  document.getElementById('sign-in-screen').classList.remove('active');
+  document.getElementById('splash').classList.remove('hidden');
+}
+function siValidate() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass = document.getElementById('si-password').value;
+  document.getElementById('si-continue').disabled = !(email && pass.length >= 1);
+}
+function completeSignIn() {
+  // credentials entered — log in and skip onboarding (existing user)
+  try { localStorage.setItem('leren-auth', '1'); localStorage.setItem('leren-onboarded', '1'); } catch(e){}
+  document.getElementById('sign-in-screen').classList.remove('active');
   hydrateProfile();
 }
 function signUp() {
@@ -2963,6 +3036,7 @@ function obSignOut() {
   } catch(e){}
   document.getElementById('onboarding').classList.remove('active');
   document.getElementById('auth-method').classList.remove('active');
+  document.getElementById('sign-in-screen').classList.remove('active');
   document.getElementById('splash').classList.remove('hidden');
 }
 function obFinish() {
@@ -3054,6 +3128,7 @@ function confirmLogOut() {
   document.getElementById('splash').classList.remove('hidden');
   document.getElementById('onboarding').classList.remove('active');
   document.getElementById('auth-method').classList.remove('active');
+  document.getElementById('sign-in-screen').classList.remove('active');
   go('live-tutor');
 }
 document.querySelectorAll('#splash button[onclick*="splash"]').forEach(btn => {
