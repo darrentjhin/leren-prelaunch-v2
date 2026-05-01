@@ -2893,7 +2893,7 @@ function siValidate() {
 }
 function completeSignIn() {
   // credentials entered — log in and skip onboarding (existing user)
-  try { localStorage.setItem('leren-auth', '1'); localStorage.setItem('leren-onboarded', '1'); } catch(e){}
+  try { localStorage.setItem('leren-auth', '1'); localStorage.setItem('leren-onboarded', '1'); sessionStorage.setItem('leren-session', '1'); } catch(e){}
   document.getElementById('sign-in-screen').classList.remove('active');
   hydrateProfile();
 }
@@ -2913,7 +2913,7 @@ function amValidate() {
 }
 function proceedSignUp() {
   // method chosen — set auth + launch onboarding
-  try { localStorage.setItem('leren-auth', '1'); } catch(e){}
+  try { localStorage.setItem('leren-auth', '1'); sessionStorage.setItem('leren-session', '1'); } catch(e){}
   document.getElementById('auth-method').classList.remove('active');
   document.getElementById('onboarding').classList.add('active');
   obShow(1);
@@ -3033,6 +3033,7 @@ function obSignOut() {
     localStorage.removeItem('leren-onboarded');
     localStorage.removeItem('leren-profile');
     localStorage.removeItem('leren-screen');
+    sessionStorage.removeItem('leren-session');
   } catch(e){}
   document.getElementById('onboarding').classList.remove('active');
   document.getElementById('auth-method').classList.remove('active');
@@ -3049,7 +3050,7 @@ function obFinish() {
     depth: obState.depth,
     style: obState.style
   });
-  try { localStorage.setItem('leren-onboarded', '1'); } catch(e){}
+  try { localStorage.setItem('leren-onboarded', '1'); sessionStorage.setItem('leren-session', '1'); } catch(e){}
   document.getElementById('onboarding').classList.remove('active');
   hydrateProfile();
 }
@@ -3103,8 +3104,18 @@ document.querySelectorAll('[data-set-group]').forEach(grid => {
   });
 });
 
-// ════════ ALWAYS SHOW WELCOME ON LOAD ════════
-// Splash is always the first thing seen — no auto-skip
+// ════════ SESSION RESTORE ON REFRESH ════════
+// sessionStorage persists through refresh but clears on new open — perfect for this behaviour
+try {
+  if (sessionStorage.getItem('leren-session') === '1') {
+    const onboarded = localStorage.getItem('leren-onboarded') === '1';
+    document.getElementById('splash').classList.add('hidden');
+    if (!onboarded) {
+      document.getElementById('onboarding').classList.add('active');
+      obShow(1);
+    }
+  }
+} catch(e){}
 window.addEventListener('DOMContentLoaded', hydrateProfile);
 function logOut() { openModal('logout-confirm'); }
 function confirmLogOut() {
@@ -3114,6 +3125,7 @@ function confirmLogOut() {
     localStorage.removeItem('leren-screen');
     localStorage.removeItem('leren-onboarded');
     localStorage.removeItem('leren-profile');
+    sessionStorage.removeItem('leren-session');
   } catch(e){}
   document.getElementById('splash').classList.remove('hidden');
   document.getElementById('onboarding').classList.remove('active');
